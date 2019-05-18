@@ -48,10 +48,6 @@ def make_image(X):
     for i in range(len(prediction[1])):
         prediction[i]=cv2.cvtColor(prediction[i],cv2.COLOR_BGR2RGB)
     #print(Prediction[11])
-
-    #plt.imshow(Prediction[11])                           
-    #plt.axis('off')
-    #plt.show()
     print(prediction[1])
     print(prediction.shape)
 
@@ -63,27 +59,6 @@ def resize_pic(child_conn, img_local):
     img = cv2.imread(img_local)
     img=cv2.resize(img,(100,100),cv2.INTER_CUBIC)
     child_conn.send(img)
-#from keras import backend as K
-#config = tf.ConfigProto()
-#config.gpu_options.per_process_gpu_memory_fraction = 0.9
-#config.gpu_options.allow_growth=True
-
-#K.clear_session()
-#sess = tf.Session(config=config)
-#K.set_session(sess)
-###################################
-#config = tf.ConfigProto()
-#config.gpu_options.per_process_gpu_memory_fraction = 0.5
-#config.gpu_options.allow_growth=True
-#sess = tf.Session(config=config)
-
-#os.environ['CUDA_VISIBLE_DEVICES'] = '-1'#no gpu
-###################################
-
-
-#class MemoryCallback(Callback):
-#    def on_epoch_end(self, epoch, log={}):
-#        print(resource.getrusage(resource.RUSAGE_SELF).ru_maxrss)
 
 
 src = "./data" #pokeRGB_black
@@ -132,28 +107,7 @@ d[img_count-1].join()
 X.append(img)
 
 del parent_conn,d
-####for i in range(img_count):
-####
-####    img=parent_conn[i].recv()
-####    parent_conn[i].close()
-####    d[i].join()
-####    X.append(img)
-####    if i%500==0:
-####        print('Images proccessed: '+str(i))
 
-##for each in os.listdir(dst2):
-##    
-##    img = cv2.imread(os.path.join(dst2,each))
-##    img=cv2.resize(img,(100,100),cv2.INTER_CUBIC)
-##    
-##    X.append(img)
-
-##for each in os.listdir(dst3):
-##    
-##    img = cv2.imread(os.path.join(dst,each))
-##    img=cv2.resize(img,(100,100),cv2.INTER_CUBIC)
-##    
-##    not_face.append(img)
 
 print(X[0].shape)
 X = np.array(X).reshape(-1, IMG_SIZE_UP, IMG_SIZE_UP, 3)#type changed to numpy for shape
@@ -178,20 +132,6 @@ if add_train:
     print(model.summary())
 else:
     model = Sequential()
-
-    #model.add(Conv2D(100, (3, 3), input_shape=X.shape[1:]))
-    #model.add(Activation('relu'))
-    #model.add(MaxPooling2D(pool_size=(2, 2)))
-    #model.add(Conv2D(100, (3, 3)))
-    #model.add(Activation('relu'))
-    #model.add(MaxPooling2D(pool_size=(2, 2)))
-
-    #model.add(Flatten())  # this converts our 3D feature maps to 1D feature vectors
-
-    #model.add(Dense(64))
-
-    #model.add(Dense(1))
-    #model.add(Activation('sigmoid'))
 
     print(X.shape)    
 
@@ -255,19 +195,6 @@ saver.save(sess, current_output_local)
 
 model.save(current_output_local+'my_model.h5')
 #print(model.get_weights())
-
-
-############    
-###does not like to reopen old
-##    del model
-##    del saver
-##
-##    model = load_model('keras_model.hdf5')
-##
-##    saver = tf.train.Saver()
-##    sess = backend.get_session()
-##    saver.restore(sess, current_output_local)
-
 
 
 
